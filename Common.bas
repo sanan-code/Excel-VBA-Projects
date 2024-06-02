@@ -399,7 +399,7 @@ Next i
   gun = Int((temp - il * 365.2) - (ay * 30.4))
 
 If t = 1 Then
-  result = il & " il " & ay & " ay " & gun & " gün"
+  result = il & " il " & ay & " ay " & gun & " gÃ¼n"
 ElseIf t = 2 Then
   ReDim result(1 To 3)
   result(1) = il
@@ -408,6 +408,24 @@ ElseIf t = 2 Then
 End If
 
 getExperienceByYMD = result
+End Function
+
+Public Function decimalToBinary(ByVal n As Long) As Long
+Dim result As String, qaliq As Long
+Do
+  qaliq = n Mod 2
+  n = Excel.WorksheetFunction.RoundDown(n / 2, 0)
+  result = qaliq & result
+Loop Until n = 0
+decimalToBinary = CLng(result)
+End Function
+
+Public Function binaryToDecimal(ByVal n As Long) As Long
+Dim result As Long, i As Long
+For i = 1 To Len(CStr(n))
+  result = ((2 ^ (Len(CStr(n)) - i)) * Mid(CStr(n), i, 1)) + result
+Next i
+binaryToDecimal = CLng(result)
 End Function
 
 'Public Sub removeDuplicateValuesFromControl(c As Control)
