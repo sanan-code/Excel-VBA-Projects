@@ -428,6 +428,18 @@ Next i
 binaryToDecimal = CLng(result)
 End Function
 
+Public Sub fillEmptyCellsInTable(ByVal sht As String, ByVal table As String, r As Integer)
+
+Dim i As Integer
+
+With ThisWorkbook.Worksheets(sht).ListObjects(table)
+  For i = 1 To .ListColumns.Count
+    If .ListRows(r).Range(i).Value = "" Then .ListRows(r).Range(i).Value = "-"
+  Next i
+End With
+
+End Sub
+
 'Public Sub removeDuplicateValuesFromControl(c As Control)
 
 'Dim i, j, controlLen As Long: controlLen = c.ListCount
