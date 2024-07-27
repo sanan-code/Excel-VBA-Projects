@@ -428,26 +428,38 @@ Next i
 binaryToDecimal = CLng(result)
 End Function
 
-Public Sub fillEmptyCellsInTable(ByVal sht As String, ByVal table As String, r As Integer)
+Public Function areDatesIntersect(ByVal sd As Date, ByVal ed As Date, ByVal scd As Date, ByVal ecd As Date)
+'sd - start date
+'ed - end date
+'scd - checking start date
+'ecd - checking end date
 
-Dim i As Integer
+Dim result As Boolean
+result = False
 
-With ThisWorkbook.Worksheets(sht).ListObjects(table)
-  For i = 1 To .ListColumns.Count
-    If .ListRows(r).Range(i).Value = "" Then .ListRows(r).Range(i).Value = "-"
-  Next i
-End With
+'yoxlama
+If (sd - ed > 0) Or (scd - ecd > 0) Then Exit Function
 
-End Sub
+'main
+If (sd <= scd And scd <= ed) Or (sd <= ecd And ecd <= ed) Then result = True
 
-'Public Sub removeDuplicateValuesFromControl(c As Control)
+areDatesIntersect = result
+End Function
 
-'Dim i, j, controlLen As Long: controlLen = c.ListCount
+Public Function isDateIntersect(ByVal sd As Date, ByVal ed As Date, ByVal d As Date) As Boolean
+'sd - start date
+'ed - end date
+'d - checking date
 
-'For i = controlLen - 1 To 0 Step -1
-  'For j = controlLen - 1 To i + 1 Step -1
-    'If c.List(i, 0) = c.List(j, 0) Then c.RemoveItem (j): controlLen = c.ListCount
-  'Next j
-'Next i
+Dim result As Boolean
+result = False
 
-'End Sub
+'yoxlama
+If sd - ed > 0 Then Exit Function
+
+'main
+If sd <= d And d <= ed Then isDateIntersect = True
+
+isDateIntersect = result
+End Function
+
