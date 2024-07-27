@@ -173,7 +173,17 @@ End With
 deleteEmptyRows3 = deletedRowsCount
 End Function
 
+Public Sub fillEmptyCellsInTable(ByVal sht As String, ByVal table As String, r As Integer)
 
+Dim i As Integer
+
+With ThisWorkbook.Worksheets(sht).ListObjects(table)
+  For i = 1 To .ListColumns.Count
+    If .ListRows(r).Range(i).Value = "" Then .ListRows(r).Range(i).Value = "-"
+  Next i
+End With
+
+End Sub
 
 
 
