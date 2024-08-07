@@ -185,7 +185,70 @@ End With
 
 End Sub
 
+Public Function getMaxDate(ByVal shtName As String, ByVal lo As String, ByVal colName As String)
+Dim i As Long, j As Long
+Dim result As Date
+Dim flag As Boolean
+flag = False
 
+With ThisWorkbook.Sheets(shtName).ListObjects(lo)
+  For i = 1 To .ListRows.Count
+    For j = i To .ListRows.Count
+    
+      With .ListColumns(colName)
+        If CDate(.DataBodyRange(i).Value) >= CDate(.DataBodyRange(j).Value) Then
+          flag = True
+        Else
+          flag = False
+          Exit For
+        End If
+      End With
+      
+    Next j
+    
+    If flag Then
+      result = .ListColumns(colName).DataBodyRange(i).Value
+      Exit For
+    End If
+    flag = False
+  Next i
+End With
+
+getMaxDate = result
+End Function
+
+
+Public Function getMinDate(ByVal shtName As String, ByVal lo As String, ByVal colName As String)
+Dim i As Long, j As Long
+Dim result As Date
+Dim flag As Boolean
+flag = False
+
+With ThisWorkbook.Sheets(shtName).ListObjects(lo)
+  For i = 1 To .ListRows.Count
+    For j = i To .ListRows.Count
+    
+      With .ListColumns(colName)
+        If CDate(.DataBodyRange(i).Value) <= CDate(.DataBodyRange(j).Value) Then
+          flag = True
+        Else
+          flag = False
+          Exit For
+        End If
+      End With
+      
+    Next j
+    
+    If flag Then
+      result = .ListColumns(colName).DataBodyRange(i).Value
+      Exit For
+    End If
+    flag = False
+  Next i
+End With
+
+getMinDate = result
+End Function
 
 
 
