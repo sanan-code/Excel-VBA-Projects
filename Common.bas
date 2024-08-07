@@ -489,3 +489,20 @@ End If
 lv:
 areDatesIntersectDays = result
 End Function
+
+Public Function convertCommasToDot(ByVal n As String) 'noqteye cevirir
+
+Dim i As Byte, t As String, result As String
+
+For i = 1 To Len(n)
+  t = Mid(n, i, 1)
+  If t = "," Then
+    result = result & "."
+  Else
+    result = result & t
+  End If
+Next i
+
+convertCommasToDot = result
+End Function
+
