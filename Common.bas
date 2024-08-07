@@ -463,3 +463,29 @@ If sd <= d And d <= ed Then isDateIntersect = True
 isDateIntersect = result
 End Function
 
+Public Function areDatesIntersectDays(ByVal sd As Date, ByVal ed As Date, ByVal scd As Date, ByVal ecd As Date) As Integer
+'nece gun ustu uste dusur
+
+Dim result As Integer
+result = 0
+
+'yoxlama
+If (sd - ed > 0) Or (scd - ecd > 0) Then Exit Function
+
+'main
+If (sd <= scd And ecd <= ed) Then
+  result = ecd - scd + 1
+  GoTo lv
+End If
+If (sd <= scd And scd <= ed) Then
+  result = ed - scd + 1
+  GoTo lv
+End If
+If (sd <= ecd And ecd <= ed) Then
+  result = ecd - sd + 1
+  GoTo lv
+End If
+
+lv:
+areDatesIntersectDays = result
+End Function
