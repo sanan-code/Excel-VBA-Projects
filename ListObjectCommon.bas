@@ -34,6 +34,34 @@ End With
 getListObjectAValue = result
 End Function
 
+Public Function getListObjectAValue2(ByVal wrkb As String, ByVal sht As String, ByVal lo As String, ByVal lookUpVal As Variant, ByVal resultCol As Variant, arrCols As Variant) As Variant
+'bir deyer qaytarir (bir nece sutunu birlesdirib getirir)
+'lookUpVal (variant) - axtarilan ortaq deyer
+'resultCol (variant) - hansi sutundan melumat gonderecek (hem adini gondere bilerik hem nomresini)
+'arrCols - hansi sutunlarda olan melumatlara esasen axtaris edecek
+
+Dim result As Variant, a As String
+
+With Workbooks(wrkb).Worksheets(sht).ListObjects(lo)
+  For i = 1 To .ListRows.Count
+  
+    'arrayda gonderilen sutun basliqlarina uygun deyerleri birlesdirir
+    For j = LBound(arrCols) To UBound(arrCols): a = a & .ListColumns(arrCols(j)).DataBodyRange(i).Value & " ": Next j
+    a = Trim(a)
+    
+    'main
+    If a = lookUpVal Then
+      result = .ListColumns(resultCol).DataBodyRange(i).Value
+      Exit For
+    End If
+    
+    a = ""
+  Next i
+End With
+
+getListObjectAValue2 = result
+End Function
+
 Public Function getListObjectValueList(ByVal wrkb As String, ByVal sht As String, ByVal lo As String, ByVal lookUpCol As Variant, ByVal lookUpVal As Variant, ByVal resultCol As Variant) As Variant()
 'birden cox deyeri list kimi return edir
 'lookUpCol (variant) - hansi sutunda axtaracaq (hem adini gondere bilerik hem nomresini)
