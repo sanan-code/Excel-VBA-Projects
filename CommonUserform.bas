@@ -145,3 +145,57 @@ With Workbooks(wrkb).Sheets(sht).ListObjects(lo)
 End With
 
 End Sub
+
+Public Sub fillListFromRange_withFilter(ByVal wrkb As String, _
+                                        ByVal sht As String, _
+                                        ByVal sr As Long, _
+                                        ByVal er As Long, _
+                                        ByVal uf As UserForm, _
+                                        ByVal l As Control, _
+                                        col As Variant, _
+                                        filt As Variant)
+'wrkb - workbook adi
+'sht - sehife adi
+'sr - setir nomresi baslama
+'er - setir nomresi bitme
+'uf - userform
+'l - list
+'col - array(1D) - sutun nomreleri
+'filt - array(2D) - filter
+
+Dim i As Long, j As Long, k As Long, r As Long, c As Long, flag As Boolean
+
+If er = -1 Then er = Workbooks(wrkb).Sheets(sht).Cells(Rows.Count, col(UBound(col))).End(xlUp).Row
+uf.Controls(l.Name).ColumnCount = UBound(col) + 1
+flag = False
+c = 0
+r = 0
+
+'main
+With Workbooks(wrkb).Sheets(sht)
+  For i = sr To er 'setir uzre addimlama
+  
+    For j = LBound(filt, 1) To UBound(filt, 1) 'filter sutunlari uzre addimlama (arrayda)
+      If .Cells(i, filt(j, 0)).Value = filt(j, 1) Then 'arrayda olan deyerler ile rangede olan deyerleri qarsilasdirir
+        flag = True
+      Else
+        flag = False
+        Exit For
+      End If
+    Next j
+    
+    If flag Then
+      uf.Controls(l.Name).AddItem
+      r = uf.Controls(l.Name).ListCount - 1
+      For k = LBound(col) To UBound(col)
+        uf.Controls(l.Name).List(r, c) = .Cells(i, col(k)).Value
+        c = c + 1
+      Next k
+    End If
+    
+    flag = False
+    c = 0
+  Next i
+End With
+
+End Sub
