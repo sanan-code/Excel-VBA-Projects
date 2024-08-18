@@ -199,3 +199,43 @@ With Workbooks(wrkb).Sheets(sht)
 End With
 
 End Sub
+
+Public Function areTextBoxesEmpty(ByVal uf As UserForm, notCheck As Variant) As Boolean
+'texbox-larin dolu olub olmadigini kontrol eden funksiya
+'uf - userform
+'notCheck - yoxlanilmayan textboxlarin adlari (Array("tb_iseqebul", "tb_ad"))
+
+Dim t As Control, i As Integer, flag As Boolean
+Dim result As Boolean
+result = True
+flag = False
+
+For Each t In uf.Controls
+  If TypeName(t) = "TextBox" Then 'controls-un tipini yoxlayiriq
+    
+    'cari olaraq controls gonderilen text box adlari ile kesisirmi
+    For i = LBound(notCheck) To UBound(notCheck)
+      If notCheck(i) = t.Name Then
+        flag = True
+        Exit For
+      End If
+    Next i
+    
+    'esas yoxlama
+    If Not flag Then
+      If t.Value = "" Then
+        result = False
+        GoTo lv
+      End If
+    End If
+    
+  End If
+  
+  flag = False
+Next t
+
+lv:
+areTextBoxesEmpty = result
+'true qayidirsa butun textboxlar doludur
+'false qayidirsa textboxlar icinde box olan var (istisna olan textboxlar xaric)
+End Function
