@@ -200,10 +200,14 @@ End With
 
 End Sub
 
-Public Function areTextBoxesEmpty(ByVal uf As UserForm, notCheck As Variant) As Boolean
-'texbox-larin dolu olub olmadigini kontrol eden funksiya
+Public Function areTextBoxesAndComboBoxesEmpty(ByVal uf As UserForm, notCheck As Variant) As Boolean
+'texbox-larin ve ComboBox-larin dolu olub olmadigini kontrol eden funksiya
 'uf - userform
-'notCheck - yoxlanilmayan textboxlarin adlari (Array("tb_iseqebul", "tb_ad"))
+'notCheck - yoxlanilmayan textboxlarin ve comboboxlarin adlari
+
+'cagirilma
+'1 - (me, Array("tb_iseqebul", "tb_ad")) - istisna ile
+'2 - (me, Array()) - butun textboxlar ve comboboxlar
 
 Dim t As Control, i As Integer, flag As Boolean
 Dim result As Boolean
@@ -211,7 +215,8 @@ result = True
 flag = False
 
 For Each t In uf.Controls
-  If TypeName(t) = "TextBox" Then 'controls-un tipini yoxlayiriq
+  If TypeName(t) = "TextBox" Or TypeName(t) = "ComboBox" Then 'controls-un tipini yoxlayiriq
+    Debug.Print TypeName(t)
     
     'cari olaraq controls gonderilen text box adlari ile kesisirmi
     For i = LBound(notCheck) To UBound(notCheck)
@@ -235,7 +240,7 @@ For Each t In uf.Controls
 Next t
 
 lv:
-areTextBoxesEmpty = result
+areTextBoxesAndComboBoxesEmpty = result
 'true qayidirsa butun textboxlar doludur
 'false qayidirsa textboxlar icinde box olan var (istisna olan textboxlar xaric)
 End Function
