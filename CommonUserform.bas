@@ -110,6 +110,66 @@ End With
 
 End Sub
 
+Public Sub fillComboFromList2(ByVal wrkb As String, sht As String, ByVal lo As String, col As Variant, uf As UserForm, c As Control, ByVal duplicate As Boolean, ByVal t As String)
+'List Object-den deyerleri combobox-a toplamaq (birden artiq sutunlari birlesdirir - birlesdirici vasitesi ile)
+'wrkb - workbook adi
+'sht - sehife adi
+'lo - list object adi
+'col - sutun adlarinin arrayi (Array("column1", "column2"))
+'uf - userform
+'c - combobox
+'t - birlesidrme isaresi
+
+Dim i As Long, j As Long, k As Long, flag As Boolean, lr As Long, colName As String, colNamei As String, colNamej As String
+flag = False
+
+With Workbooks(wrkb).Worksheets(sht).ListObjects(lo)
+  lr = .ListRows.Count
+  
+  'duplicate ile beraber
+  If duplicate Then
+    For i = 1 To lr 'setirler
+      For j = LBound(col) To UBound(col) 'sutun arrayi
+        colName = colName & .ListColumns(col(j)).DataBodyRange(i).Value & t
+      Next j
+      
+      uf.Controls(c.Name).AddItem Trim(colName)
+      colName = ""
+    Next i
+  End If
+    
+  'duplicate-siz
+  If Not duplicate Then
+    For i = 1 To lr 'setirler
+      For j = i + 1 To lr + 1 'setirler
+      
+        colNamei = ""
+        colNamej = ""
+        
+        For k = LBound(col) To UBound(col) 'sutun arrayi
+          colNamei = colNamei & .ListColumns(col(k)).DataBodyRange(i).Value & t
+          colNamej = colNamej & .ListColumns(col(k)).DataBodyRange(j).Value & t
+        Next k
+      
+        If Trim(colNamei) = Trim(colNamej) Then
+          flag = True 'duplicate oldugunu teyin edir
+          Exit For
+        End If
+        
+      Next j
+      
+      If Not flag Then uf.Controls(c.Name).AddItem colNamei
+      flag = False
+      colNamei = ""
+      colNamej = ""
+      
+    Next i
+  End If
+  
+End With
+
+End Sub
+
 Public Sub fillListFromList(ByVal wrkb As String, _
                              ByVal sht As String, _
                              ByVal lo As String, _
