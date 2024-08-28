@@ -170,6 +170,54 @@ End With
 
 End Sub
 
+Public Sub fillComboFromList3(ByVal wrkb As String, sht As String, ByVal lo As String, uf As UserForm, c As Control, ByVal mainCol As Variant, ByVal hiddenCol As Variant, ByVal duplicate As Boolean)
+'List Object-den deyerleri combobox-a toplamaq (gizli sutun ile)
+'wrkb - workbook adi
+'sht - sehife adi
+'lo - list object adi
+'uf - userform
+'c - combobox
+'mainCol - esas gorunecek sutun
+'hiddenCol - gizledilen sutun
+'duplicate - true/false
+
+Dim i As Long, j As Long, flag As Boolean, lr As Long
+flag = False
+
+With Workbooks(wrkb).Worksheets(sht).ListObjects(lo)
+  lr = .ListRows.Count
+  
+  With .ListColumns(mainCol)
+  
+    If duplicate Then
+      For i = 1 To lr
+        uf.Controls(c.Name).AddItem
+        uf.Controls(c.Name).List(i - 1, 0) = .DataBodyRange(i).Value 'main
+        uf.Controls(c.Name).List(i - 1, 1) = Workbooks(wrkb).Worksheets(sht).ListObjects(lo).ListColumns(hiddenCol).DataBodyRange(i).Value 'hidden
+      Next i
+    End If
+    
+    If Not duplicate Then
+      For i = 1 To lr
+        For j = i + 1 To lr
+          If .DataBodyRange(i).Value = .DataBodyRange(j).Value Then
+            flag = True
+            Exit For
+          End If
+        Next j
+        If Not flag Then
+          uf.Controls(c.Name).AddItem
+          uf.Controls(c.Name).List(i - 1, 0) = .DataBodyRange(i).Value 'main
+          uf.Controls(c.Name).List(i - 1, 1) = Workbooks(wrkb).Worksheets(sht).ListObjects(lo).ListColumns(hiddenCol).DataBodyRange(i).Value 'hidden
+        End If
+        flag = False
+      Next i
+    End If
+  End With
+End With
+
+End Sub
+
 Public Sub fillListFromList(ByVal wrkb As String, _
                              ByVal sht As String, _
                              ByVal lo As String, _
