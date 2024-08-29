@@ -94,7 +94,7 @@ Dim i As Long
 
 With Workbooks(wrkb).Worksheets(sht).ListObjects(lo)
   For i = .ListRows.Count To 1 Step -1
-    If .ListColumns(lookUpCol).DataBodyRange(i).Value = lookUpVal Then
+    If cStr(.ListColumns(lookUpCol).DataBodyRange(i).Value) = cStr(lookUpVal) Then
       .DataBodyRange.Rows(i).Delete
       deleteRowsCount = deleteRowsCount + 1
     End If
