@@ -352,3 +352,19 @@ areTextBoxesAndComboBoxesEmpty = result
 'true qayidirsa butun textboxlar doludur
 'false qayidirsa textboxlar icinde box olan var (istisna olan textboxlar xaric)
 End Function
+
+Public Function isSelectedFromList(uf As UserForm, l As Control) As Boolean
+'listden secim edilibmi?
+
+Dim result As Boolean, i As Long
+result = False
+
+For i = 0 To uf.Controls(l.Name).ListCount - 1
+  If uf.Controls(l.Name).Selected(i) Then
+    result = True
+    Exit For
+  End If
+Next i
+
+isSelectedFromList = result
+End Function
