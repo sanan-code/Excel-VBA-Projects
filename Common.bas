@@ -506,3 +506,31 @@ Next i
 convertCommasToDot = result
 End Function
 
+Public Sub array_bubbleSort(arr() As Long, t As Boolean)
+'t - true => azdan coxa
+'t - false => coxdan aza
+Dim i As Long, j As Long, temp As Long
+'sort
+For i = LBound(arr) To UBound(arr)
+  For j = i + 1 To UBound(arr)
+    'azdan coxa
+    If t Then
+      If arr(i) > arr(j) Then
+        temp = arr(j)
+        arr(j) = arr(i)
+        arr(i) = temp
+      End If
+    End If
+    'coxdan aza
+    If Not t Then
+      If arr(i) < arr(j) Then
+        temp = arr(j)
+        arr(j) = arr(i)
+        arr(i) = temp
+      End If
+    End If
+  Next j
+Next i
+End Sub
+
+
